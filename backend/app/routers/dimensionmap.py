@@ -30,6 +30,24 @@ def list_entries(
     return PageResult(items=items, total=total, page=page, size=size)
 
 
+@router.get("/export")
+def export_entries() -> dict[str, Any]:
+    """导出维度映射清单：返回当前过滤条件下的全量数据。"""
+    items, total = service.list_entries(page=1, size=10000)
+    return {"module": "dimensionmap", "total": total, "items": items}
+
+
+@router.get("/standard", response_model=PageResult[dict])
+def list_standard(
+    keyword: str | None = Query(default=None, description="按原始维度名或标准维度名检索"),
+    page: int = 1,
+    size: int = 20,
+) -> PageResult[dict]:
+    """标准维度映射结果：规则生效时同步写入，含历史版本，口径变化可核对。"""
+    items, total = service.list_standard(keyword=keyword, page=page, size=size)
+    return PageResult(items=items, total=total, page=page, size=size)
+
+
 @router.get("/{entry_id}", response_model=dict)
 def get_entry(entry_id: int) -> dict:
     """读取单条映射规则明细；不存在时给出可读的错误说明。"""
@@ -56,10 +74,3 @@ def run_action(entry_id: int, payload: EntryPayload) -> ActionResult:
     if entry is None:
         return ActionResult(ok=False, message=message)
     return ActionResult(ok=True, message=message, entry=entry)
-
-
-@router.get("/export")
-def export_entries() -> dict[str, Any]:
-    """导出维度映射清单：返回当前过滤条件下的全量数据。"""
-    items, total = service.list_entries(page=1, size=10000)
-    return {"module": "dimensionmap", "total": total, "items": items}

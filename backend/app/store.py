@@ -14,9 +14,13 @@ class Store:
         self._tables: dict[str, list[dict[str, Any]]] = {
             name: [dict(row) for row in rows] for name, rows in SEED_ROWS.items()
         }
+        # 业务模块以种子数据为准；运行期派生的内部表（快照、聚合明细、异常日志等）
+        # 不计入运营概览的模块卡片
+        self._business_modules = sorted(self._tables)
 
     def module_names(self) -> list[str]:
-        return sorted(self._tables)
+        # 只数业务模块；运行期派生的内部表（快照、聚合明细、批次、日志）不算业务模块
+        return list(self._business_modules)
 
     def rows(self, module: str) -> list[dict[str, Any]]:
         return self._tables.setdefault(module, [])
@@ -29,7 +33,7 @@ class Store:
 
     def overview(self) -> dict[str, object]:
         modules: list[dict[str, object]] = []
-        for name in self.module_names():
+        for name in self._business_modules:
             rows = self.rows(name)
             modules.append({
                 "name": name,

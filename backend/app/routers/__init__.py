@@ -9,6 +9,7 @@ from __future__ import annotations
 from app.routers import realtimemetric as router_realtimemetric
 from app.routers import dashboard as router_dashboard
 from app.routers import drilldown as router_drilldown
+from app.routers import drilldownagg as router_drilldownagg
 from app.routers import threshold as router_threshold
 from app.routers import anomalydetect as router_anomalydetect
 from app.routers import dataservice as router_dataservice
@@ -25,4 +26,4 @@ from app.routers import subscription as router_subscription
 from app.routers import dimensionmap as router_dimensionmap
 from app.routers import qualityscore as router_qualityscore
 
-ROUTERS = [router_realtimemetric, router_dashboard, router_drilldown, router_threshold, router_anomalydetect, router_dataservice, router_alarmhistory, router_comparison, router_aggregate, router_filterpreset, router_userinsight, router_eventanalysis, router_segmentprofile, router_trendforecast, router_viztemplate, router_subscription, router_dimensionmap, router_qualityscore]
+ROUTERS = [router_realtimemetric, router_dashboard, router_drilldown, router_drilldownagg, router_threshold, router_anomalydetect, router_dataservice, router_alarmhistory, router_comparison, router_aggregate, router_filterpreset, router_userinsight, router_eventanalysis, router_segmentprofile, router_trendforecast, router_viztemplate, router_subscription, router_dimensionmap, router_qualityscore]
